@@ -9,13 +9,26 @@ import { ViewType } from './components/layout/Sidebar';
 import { Dashboard } from './components/dashboard/Dashboard';
 import { Transactions } from './components/transactions/Transactions';
 import { Budgets } from './components/budgets/Budgets';
-import { Transaction, Budget } from './types';
+import { Transaction, Budget, User as UserType } from './types';
 import { INITIAL_TRANSACTIONS, INITIAL_BUDGETS } from './constants';
 
 import { Settings } from './components/settings/Settings';
 import { Support } from './components/support/Support';
+import { Onboarding } from './components/onboarding/Onboarding';
 
 export default function App() {
+  const [user, setUser] = useState<UserType | null>(() => {
+    const saved = localStorage.getItem('fin_user');
+    if (saved) {
+      try {
+        return JSON.parse(saved);
+      } catch (e) {
+        // Fallback
+      }
+    }
+    return null;
+  });
+
   const [currentView, setCurrentView] = useState<ViewType>('dashboard');
   const [transactions, setTransactions] = useState<Transaction[]>(() => {
     const savedT = localStorage.getItem('fin_transactions');
@@ -42,6 +55,12 @@ export default function App() {
   });
 
   // Save to local storage
+  useEffect(() => {
+    if (user) {
+      localStorage.setItem('fin_user', JSON.stringify(user));
+    }
+  }, [user]);
+
   useEffect(() => {
     localStorage.setItem('fin_transactions', JSON.stringify(transactions));
   }, [transactions]);
@@ -100,8 +119,12 @@ export default function App() {
     }
   };
 
+  if (!user) {
+    return <Onboarding onComplete={setUser} />;
+  }
+
   return (
-    <Layout currentView={currentView} onChangeView={setCurrentView}>
+    <Layout currentView={currentView} onChangeView={setCurrentView} user={user}>
       {renderView()}
     </Layout>
   );

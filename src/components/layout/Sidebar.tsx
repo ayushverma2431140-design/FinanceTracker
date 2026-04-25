@@ -11,6 +11,8 @@ import {
 import { cn } from '../../lib/utils';
 import { motion, AnimatePresence } from 'motion/react';
 
+import { User } from '../../types';
+
 export type ViewType = 'dashboard' | 'transactions' | 'budgets' | 'settings' | 'support';
 
 interface SidebarProps {
@@ -18,9 +20,10 @@ interface SidebarProps {
   onChangeView: (view: ViewType) => void;
   isOpen: boolean;
   setIsOpen: (isOpen: boolean) => void;
+  user: User;
 }
 
-export function Sidebar({ currentView, onChangeView, isOpen, setIsOpen }: SidebarProps) {
+export function Sidebar({ currentView, onChangeView, isOpen, setIsOpen, user }: SidebarProps) {
   const navItems = [
     { id: 'dashboard' as const, label: 'Dashboard', icon: LayoutDashboard },
     { id: 'transactions' as const, label: 'Transactions', icon: ArrowRightLeft },
@@ -129,11 +132,11 @@ export function Sidebar({ currentView, onChangeView, isOpen, setIsOpen }: Sideba
           
           <div className="mt-6 flex items-center gap-3 px-3 py-2 cursor-pointer hover:bg-[#18181b] rounded-xl transition-colors">
             <div className="w-9 h-9 rounded-full bg-[#27272a] border border-[#3f3f46] flex items-center justify-center text-[#fafafa] font-bold text-xs shrink-0">
-              AV
+              {user.name.split(' ').map(n => n[0]).join('').substring(0, 2).toUpperCase()}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-sm font-medium text-[#fafafa] truncate">Ayush Verma</p>
-              <p className="text-xs text-[#a1a1aa] truncate">Pro Plan</p>
+              <p className="text-sm font-medium text-[#fafafa] truncate">{user.name}</p>
+              <p className="text-xs text-[#a1a1aa] truncate">{user.email}</p>
             </div>
           </div>
         </div>

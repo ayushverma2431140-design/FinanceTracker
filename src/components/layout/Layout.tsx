@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { Sidebar, ViewType } from './Sidebar';
 import { Header } from './Header';
+import { User } from '../../types';
 
 interface LayoutProps {
   children: React.ReactNode;
   currentView: ViewType;
   onChangeView: (view: ViewType) => void;
+  user: User;
 }
 
-export function Layout({ children, currentView, onChangeView }: LayoutProps) {
+export function Layout({ children, currentView, onChangeView, user }: LayoutProps) {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   const getTitle = () => {
@@ -27,6 +29,7 @@ export function Layout({ children, currentView, onChangeView }: LayoutProps) {
         onChangeView={onChangeView} 
         isOpen={isSidebarOpen} 
         setIsOpen={setIsSidebarOpen} 
+        user={user}
       />
       
       <div className="lg:pl-72 flex flex-col min-h-screen">

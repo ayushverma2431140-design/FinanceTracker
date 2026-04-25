@@ -23,3 +23,8 @@ export interface Budget {
   period: 'monthly';
   rollover?: boolean;
 }
+
+export interface User {
+  name: string;
+  email: string;
+}
